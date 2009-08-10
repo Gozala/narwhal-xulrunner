@@ -3,13 +3,12 @@
      xmlns:em="http://www.mozilla.org/2004/em-rdf#">
     <Description about="urn:mozilla:install-manifest">
         <em:id>narwhal@narwhaljs.org</em:id>
-        <em:name>narwhal xulrunner platform</em:name>
+        <em:name>narwhal xulrunner engine</em:name>
         <em:version>0.1</em:version>
-        <em:description>Narwhal xulrunner based platform</em:description>
+        <em:description>Narwhal xulrunner based engine</em:description>
         <em:creator>Irakli Gozalishvili</em:creator>
-        <em:homepageURL>http://gozala.github.com/narwzilla</em:homepageURL>
+        <em:homepageURL>http://github.com/Gozala/narwhal-xulrunner</em:homepageURL>
         <em:type>2</em:type> <!-- type=extension --> 
-
         <em:targetApplication>
             <Description>
                 <!-- Mozilla toolkit's uuid -->
