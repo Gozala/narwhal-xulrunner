@@ -14,7 +14,7 @@ const FileService = IOService.getProtocolHandler("file").QueryInterface(Ci.nsIFi
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var NARWHAL_HOME = "NARWHAL_HOME",
-    PLATFORM_HOME = "NARWHAL_PLATFORM_HOME",
+    ENGINE_HOME = "NARWHAL_ENGINE_HOME",
     PATH = "NARWHAL_PATH",
     JS_PATH = "JS_PATH";
 var APP_STARTUP = "app-startup";
@@ -71,7 +71,7 @@ function getResourceFile(uri) FileService.getFileFromURLSpec(ResourceHandler.res
 /**
  * XPCOM handles command line argument -narwhal. If argument is followed by
  * value it will be used as a path to the bootstarp.js, Otherwise looks for
- * ENV variable NARWHAL_HOME and if" its defined looks for xulrunner platform
+ * ENV variable NARWHAL_HOME and if" its defined looks for xulrunner engine
  * and uses it"s bootstrap.js to load.
  */
 function CommandLineBoot() {}
@@ -98,7 +98,7 @@ CommandLineBoot.prototype = {
         if (!bootstrap && cmdLine.handleFlag("narwhal", false)) {
             try {
                 var path = Env.get(NARWHAL_HOME);
-                bootstrap = getFile(path, "platforms", "xulrunner", "bootstrap.js");
+                bootstrap = getFile(path, "engines", "xulrunner", "bootstrap.js");
             } catch(e) {}
         }
         bootstrapNarwhal(bootstrap);
@@ -121,7 +121,7 @@ AppStartupBoot.prototype = {
     },
     boot: function() {
         try {
-            bootstrapNarwhal(getResourceFile("resource://narwhal/platforms/xulrunner/bootstrap.js"));
+            bootstrapNarwhal(getResourceFile("resource://narwhal/engines/xulrunner/bootstrap.js"));
         } catch(e) {}
     }
 };
@@ -135,16 +135,16 @@ function bootstrapNarwhal(bootstrap) {
         try {
             if (!Env.exists(NARWHAL_HOME))
                 Env.set(NARWHAL_HOME, bootstrap.parent.parent.parent.path);
-            if (!Env.exists(PLATFORM_HOME))
-                Env.set(PLATFORM_HOME, bootstrap.parent.path);
+            if (!Env.exists(ENGINE_HOME))
+                Env.set(ENGINE_HOME, bootstrap.parent.path);
             if (!Env.exists(PATH)) {
                 var path = [];
                 var narwhalHome = Env.get(NARWHAL_HOME);
 
-                var platformLib = getFile(Env.get(PLATFORM_HOME), "lib");
-                var defaultLib = getFile(narwhalHome, "platforms", "default", "lib");
+                var engineLib = getFile(Env.get(ENGINE_HOME), "lib");
+                var defaultLib = getFile(narwhalHome, "engines", "default", "lib");
                 var narwhalLib = getFile(narwhalHome, "lib");
-                if (platformLib.exists()) path.push(platformLib.path);
+                if (engineLib.exists()) path.push(engineLib.path);
                 if (defaultLib.exists()) path.push(defaultLib.path);
                 if (narwhalLib.exists()) path.push(narwhalLib.path);
                 if (Env.exists(JS_PATH)) path.push(Env.get(JS_PATH))

@@ -5,7 +5,7 @@
  * Module exposes narwhals global, system, require, print to the scope it is being loaded
  * Simple import this module as in example.
  * @example
- * Components.utils.import('resource://narwzilla/narwhal.js');
+ * Components.utils.import('resource://narwhal-include/narwhal.js');
  * @author Irakli Gozalishvili <rfobic@gmail.com>
  */
 EXPORTED_SYMBOLS = ["global", "require", "print", "system"];

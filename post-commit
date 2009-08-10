@@ -10,29 +10,29 @@
 ref=$(<.git/HEAD)
 branch=${ref##ref: refs/heads/}
 
-if [ $branch == "xulrunner" ]; then
+if [ $branch == "master" ]; then
     origin=$(pwd)
     root=$origin; while [ ! -d "$root/.git" ]; do root="$root/.."; done
     
-    extensions="$root/platforms/xulrunner/extensions"
+    extensions="$root/extensions"
     builds="$extensions/builds"
     
     # making builds folder
     mkdir -p $builds
     
     # building narwzilla@narwhaljs.org
-    extension="$extensions/narwzilla@narwhaljs.org"
-    build="$builds/narwzilla@narwhaljs.org.xpi"
-    rm -f $build
-    cd $extension
-    zip -r $build chrome components modules defaults chrome.manifest install.rdf >/dev/null
+    # extension="$extensions/narwzilla@narwhaljs.org"
+    # build="$builds/narwzilla@narwhaljs.org.xpi"
+    # rm -f $build
+    # cd $extension
+    # zip -r $build chrome components modules defaults chrome.manifest install.rdf >/dev/null
     
-    # building narwzilla.platform@narwhaljs.org.xpi
+    # building narwhal@narwhaljs.org.xpi
     extension="$extensions/narwhal@narwhaljs.org"
     build="$builds/narwhal@narwhaljs.org.xpi"
     rm -f $build
     cd $extension
-    zip -r $build *.* chrome components defaults modules narwhal/*.* narwhal/lib narwhal/packages/jack narwhal/platforms/default narwhal/platforms/narwzilla/lib/ narwhal/platforms/narwzilla/*.* -x *.git/* >/dev/null
+    zip -r $build *.* chrome components defaults modules narwhal/*.* narwhal/lib narwhal/packages/jack narwhal/engines/default narwhal/engines/xulrunner/lib/ -x *.git/* >/dev/null
     
     cd $origin
 fi;
