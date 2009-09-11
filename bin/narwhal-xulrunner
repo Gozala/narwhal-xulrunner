@@ -25,9 +25,16 @@ if [ "$JS_PATH" ]; then
     NARWHAL_PATH="$NARWHAL_PATH:$JS_PATH"
 fi
 
+# collection arguments and exporting
+NARWHAL_ARGUMENTS=""
+for arg in $*; do
+    NARWHAL_ARGUMENTS=$NARWHAL_ARGUMENTS" "$arg
+done;
+
 export NARWHAL_PATH
 export NARWHAL_HOME
 export NARWHAL_ENGINE_HOME
+export NARWHAL_ARGUMENTS
 
 FIREFOX=firefox
 if [ -e /Applications/Firefox.app ]; then
@@ -45,15 +52,8 @@ if [ "$(which cygpath 2>/dev/null)" ]; then
      export NARWHAL_ENGINE_HOME=$(cygpath -wa -- "$NARWHAL_ENGINE_HOME")
 fi
 
-# drop into shell if there are no additional arguments
-if [ $# -lt 1 ]; then
-    # FIXME: no way to explicitly drop into shell
-    $NARWHAL $BOOTSTRAP "-narwhal-args $@" &
-    sleep 2;
-    $RLWRAP $REPL
-else
-    # TODO
-    MAIN=$(cd -P -- "$(dirname -- "$1")" && pwd -P) && MAIN=$MAIN/$(basename -- "$1" .js)
-    echo $NARWHAL $BOOTSTRAP "-narwhal-args $MAIN $0 $@"
-    $NARWHAL $BOOTSTRAP "-narwhal-args $MAIN $0 $@"
-fi
+# FIXME: no way to explicitly drop into shell
+$NARWHAL $BOOTSTRAP &
+sleep 2;
+$RLWRAP $REPL
+
