@@ -5,17 +5,19 @@
  * Bootstrap file for the XULRunner engine.
  */
 (function(global, evalGlobal) {
-    global.arguments = __narwhal_args__;
     const Cc = Components.classes;
     const Ci = Components.interfaces;
     const Cu = Components.utils;
     const Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment);
 
     var moduleScopingEnabled = false;
-    var debug = true;
-    var NARWHAL_PATH = Env.exists('NARWHAL_PATH') ? Env.get('NARWHAL_PATH') : null,
-        NARWHAL_HOME = Env.exists('NARWHAL_HOME') ? Env.get('NARWHAL_HOME') : null,
-        NARWHAL_ENGINE_HOME = Env.exists('NARWHAL_ENGINE_HOME') ? Env.get('NARWHAL_ENGINE_HOME') : null;
+    var NARWHAL_PATH = Env.exists("NARWHAL_PATH") ? Env.get("NARWHAL_PATH") : null,
+        NARWHAL_HOME = Env.exists("NARWHAL_HOME") ? Env.get("NARWHAL_HOME") : null,
+        NARWHAL_ENGINE_HOME = Env.exists("NARWHAL_ENGINE_HOME") ? Env.get("NARWHAL_ENGINE_HOME") : null,
+        debug =  Env.exists("NARWHAL_DEBUG") ? Env.get("NARWHAL_DEBUG") : false,
+        verbose = Env.exists("NARWHAL_VERBOSE") ? Env.get("NARWHAL_VERBOSE") : false,
+        args = Env.exists("NARWHAL_ARGUMENTS") ? Env.get("NARWHAL_ARGUMENTS").split(" ") : null;
+
     function print (message) {
         dump(message + '\n')
     }
@@ -85,7 +87,8 @@
         return Cu.evalInSandbox(source, global, "1.8", path, lineNo);
     }
     var path = getFile(NARWHAL_HOME, 'narwhal.js').path;
-    var narwhal = Cu.evalInSandbox(read(path), global, "1.8", path, 0)
+    var narwhal = Cu.evalInSandbox(read(path), global, "1.8", path, 0);
+    global.arguments = global.arguments || args;
     narwhal({
         global: global,
         evalGlobal: evalGlobal, //evaluateInGlobal,
@@ -94,6 +97,7 @@
         engines: ['xulrunner', 'default'],
         os: Cc["@mozilla.org/xre/app-info;1"].getService(Ci.nsIXULRuntime).OS,
         debug: debug,
+        verbose: verbose,
         print: print,
         fs: {
             read: read,
