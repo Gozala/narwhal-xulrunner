@@ -8,6 +8,6 @@ Narwhal Engine: Prototype implementation
 
 -------------------------
 
-In order to get js shell you need to put mozrepl(http://github.com/bard/mozrepl/) extension into 
+In order to get js shell you need to put [mozrepl](http://github.com/bard/mozrepl/) extension into
 <code>apps/firenarwhal/extensions</code>
 
