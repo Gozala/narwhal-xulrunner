@@ -1,16 +1,13 @@
-
 Narwhal Engine: Prototype implementation
 ===========================================================
 
 <pre>
-<code>
-export NARWHAL_ENGINE='xulrunner'
-narhwal
-</code>
+<code>export NARWHAL_ENGINE='xulrunner'</code>
+<code>narhwal</code>
 </pre>
 
 -------------------------
 
-In order to get narwhal shell you need to put mozrepl extension into 
-<code>narwhal/engines/xulrunner/apps/firenarwhal/extensions</code>
+In order to get js shell you need to put mozrepl(http://github.com/bard/mozrepl/) extension into 
+<code>apps/firenarwhal/extensions</code>
 
