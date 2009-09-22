@@ -10,7 +10,7 @@ const Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironmen
 const ResourceHandler = Cc['@mozilla.org/network/protocol;1?name=resource'].getService(Ci.nsIResProtocolHandler);
 const IOService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService)
 const FileService = IOService.getProtocolHandler("file").QueryInterface(Ci.nsIFileProtocolHandler);
-
+const ObserverService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 var NARWHAL_HOME = "NARWHAL_HOME",
@@ -18,6 +18,7 @@ var NARWHAL_HOME = "NARWHAL_HOME",
     PATH = "NARWHAL_PATH",
     JS_PATH = "JS_PATH";
 var APP_STARTUP = "app-startup";
+var PROFILE_READY = "profile-do-change";
 var ARGUMENTS = [];
 
 /**
@@ -100,6 +101,7 @@ CommandLineBoot.prototype = {
     },
     helpInfo: "-narwhal [path]             Bootstrap narwhal\nwill boot narwhal from the bootstar path. If not specified will look for ENV variable NARWHAL_HOME"
 }
+
 /**
  * XPCOM observes application startup. If there is narwhal extension installed
  * it will use as a path to the bootstarp.js to load, Otherwise looks for.
@@ -112,12 +114,21 @@ AppStartupBoot.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsISupports, Ci.nsIObserver]),
     _xpcom_categories: [{ category: APP_STARTUP, service: true }],
     observe: function(subject, topic, data) {
-        if (topic == APP_STARTUP) this.boot();
+        if (topic == APP_STARTUP) this.register();
+        else if (topic == PROFILE_READY) this.boot();
+    },
+    register: function() {
+        ObserverService.addObserver(this, PROFILE_READY, false);
+    },
+    unregister: function() {
+        ObserverService.removeObserver(this, PROFILE_READY);
     },
     boot: function() {
         try {
             bootstrapNarwhal(getResourceFile("resource://narwhal/engines/xulrunner/bootstrap.js"));
-        } catch(e) {}
+        } finally {
+            this.unregister();
+        }
     }
 };
 /**
