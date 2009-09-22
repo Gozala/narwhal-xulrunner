@@ -13,26 +13,26 @@ branch=${ref##ref: refs/heads/}
 if [ $branch == "master" ]; then
     origin=$(pwd)
     root=$origin; while [ ! -d "$root/.git" ]; do root="$root/.."; done
-    
+
     extensions="$root/extensions"
     builds="$extensions/builds"
-    
+
     # making builds folder
     mkdir -p $builds
-    
+
     # building narwzilla@narwhaljs.org
     # extension="$extensions/narwzilla@narwhaljs.org"
     # build="$builds/narwzilla@narwhaljs.org.xpi"
     # rm -f $build
     # cd $extension
     # zip -r $build chrome components modules defaults chrome.manifest install.rdf >/dev/null
-    
+
     # building narwhal@narwhaljs.org.xpi
     extension="$extensions/narwhal@narwhaljs.org"
     build="$builds/narwhal@narwhaljs.org.xpi"
     rm -f $build
     cd $extension
-    zip -r $build *.* chrome components defaults modules narwhal/*.js narwhal/lib narwhal/packages/jack narwhal/engines/default narwhal/engines/xulrunner/*.js narwhal/engines/xulrunner/lib/ -x *.git/* >/dev/null
-    
+    zip -r $build *.* chrome components defaults modules narwhal/*.js narwhal/*.json narwhal/lib narwhal/packages/jack narwhal/engines/default narwhal/engines/xulrunner/*.js narwhal/engines/xulrunner/lib/ -x *.git/* >/dev/null
+
     cd $origin
 fi;
