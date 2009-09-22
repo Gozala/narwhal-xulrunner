@@ -33,6 +33,5 @@ if [ $branch == "master" ]; then
     rm -f $build
     cd $extension
     zip -r $build *.* chrome components defaults modules narwhal/*.js narwhal/*.json narwhal/lib narwhal/packages/jack narwhal/engines/default narwhal/engines/xulrunner/*.js narwhal/engines/xulrunner/lib/ -x *.git/* >/dev/null
-
     cd $origin
 fi;
