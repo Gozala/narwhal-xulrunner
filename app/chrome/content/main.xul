@@ -6,6 +6,6 @@
         xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html="http://www.w3.org/1999/xhtml"
         hidechrome="true">
-  <script src="chrome://narwhal/content/narwhal.js" type="application/x-javascript"/>
+  <script src="resource://narwhal-xulrunner/embed.js" type="application/x-javascript"/>
 </window>
 

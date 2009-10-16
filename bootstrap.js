@@ -104,7 +104,7 @@
             isFile: isFile
         },
         prefix: NARWHAL_HOME,
-        prefixes: [NARWHAL_HOME],
+        prefixes: [NARWHAL_ENGINE_HOME, NARWHAL_HOME],
         path: NARWHAL_PATH
     });
 

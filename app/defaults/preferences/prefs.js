@@ -1,4 +1,4 @@
-pref("toolkit.defaultChromeURI", "chrome://firenarwhal/content/main.xul");
+pref("toolkit.defaultChromeURI", "chrome://narwhal/content/main.xul");
 pref("xpinstall.dialog.confirm", "chrome://mozapps/content/xpinstall/xpinstallConfirm.xul");
 pref("xpinstall.dialog.progress.skin", "chrome://mozapps/content/extensions/extensions.xul?type=themes");
 pref("xpinstall.dialog.progress.chrome", "chrome://mozapps/content/extensions/extensions.xul?type=extensions");

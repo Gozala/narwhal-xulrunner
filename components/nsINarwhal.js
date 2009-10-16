@@ -5,7 +5,6 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
-const Loader = Cc["@mozilla.org/moz/jssubscript-loader;1"].getService(Ci.mozIJSSubScriptLoader);
 const Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment);
 const ResourceHandler = Cc['@mozilla.org/network/protocol;1?name=resource'].getService(Ci.nsIResProtocolHandler);
 const IOService = Cc['@mozilla.org/network/io-service;1'].getService(Ci.nsIIOService)
@@ -13,13 +12,17 @@ const FileService = IOService.getProtocolHandler("file").QueryInterface(Ci.nsIFi
 const ObserverService = Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
-var NARWHAL_HOME = "NARWHAL_HOME",
-    ENGINE_HOME = "NARWHAL_ENGINE_HOME",
-    PATH = "NARWHAL_PATH",
-    JS_PATH = "JS_PATH";
+var NARWHAL_HOME = "NARWHAL_HOME";
+var ENGINE_HOME = "NARWHAL_ENGINE_HOME";
+var PATH = "NARWHAL_PATH";
+var JS_PATH = "JS_PATH";
 var APP_STARTUP = "app-startup";
 var PROFILE_READY = "profile-do-change";
 var ARGUMENTS = [];
+
+var EXTENSION_BOOTSTRAP_URI = "resource://narwhal-xulrunner/bootstrap.js";
+var EXTENSION_ENGINE_URI = "resource://narwhal-xulrunner/";
+var EXTENSION_NARWHAL_URI = "resource://narwhal/";
 
 /**
  * Utility function which returns file for a correspoding path.
@@ -93,8 +96,7 @@ CommandLineBoot.prototype = {
         // trying to read NARWHAL_HOME env variable
         if (!bootstrap && cmdLine.handleFlag("narwhal", false)) {
             try {
-                var path = Env.get(NARWHAL_HOME);
-                bootstrap = getFile(path, "engines", "xulrunner", "bootstrap.js");
+                bootstrap = getFile(Env.get(ENGINE_HOME), "bootstrap.js");
             } catch(e) {}
         }
         bootstrapNarwhal(bootstrap);
@@ -125,7 +127,7 @@ AppStartupBoot.prototype = {
     },
     boot: function() {
         try {
-            bootstrapNarwhal(getResourceFile("resource://narwhal/engines/xulrunner/bootstrap.js"));
+            bootstrapNarwhal(getResourceFile(EXTENSION_BOOTSTRAP_URI));
         } finally {
             this.unregister();
         }
@@ -140,29 +142,16 @@ function bootstrapNarwhal(bootstrap) {
     if (bootstrap && bootstrap.exists())
         try {
             if (!Env.exists(NARWHAL_HOME))
-                Env.set(NARWHAL_HOME, bootstrap.parent.parent.parent.path);
+                Env.set(NARWHAL_HOME, getResourceFile(EXTENSION_NARWHAL_URI).path);
             if (!Env.exists(ENGINE_HOME))
-                Env.set(ENGINE_HOME, bootstrap.parent.path);
-            if (!Env.exists(PATH)) {
-                var path = [];
-                var narwhalHome = Env.get(NARWHAL_HOME);
-
-                var engineLib = getFile(Env.get(ENGINE_HOME), "lib");
-                var defaultLib = getFile(narwhalHome, "engines", "default", "lib");
-                var narwhalLib = getFile(narwhalHome, "lib");
-                if (engineLib.exists()) path.push(engineLib.path);
-                if (defaultLib.exists()) path.push(defaultLib.path);
-                if (narwhalLib.exists()) path.push(narwhalLib.path);
-                if (Env.exists(JS_PATH)) path.push(Env.get(JS_PATH))
-                Env.set(PATH, path.join(":"))
-            }
+                Env.set(ENGINE_HOME, getResourceFile(EXTENSION_ENGINE_URI).path);
             var sandbox = Cu.Sandbox(Cc["@mozilla.org/systemprincipal;1"].createInstance(Ci.nsIPrincipal));
             sandbox.args = ARGUMENTS;
             Cu.evalInSandbox(readFile(bootstrap), sandbox, "1.8", bootstrap.path, 0);
             Narwhal.prototype.__proto__ = sandbox;
         } catch(e) {
-            if (typeof e == "string") dump(e + "\n");
-            else for (var key in e) dump('Error:' + key + ": " + e[key] + "\n");
+            if (e.message) dump(e.message + "\n");
+            if (e.stack) dump(e.stack + "\n");
         }
 }
 /**
