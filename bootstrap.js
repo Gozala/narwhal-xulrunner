@@ -105,6 +105,7 @@
         },
         prefix: NARWHAL_HOME,
         prefixes: [NARWHAL_ENGINE_HOME, NARWHAL_HOME],
+        enginePrefix: NARWHAL_ENGINE_HOME,
         path: NARWHAL_PATH
     });
 
