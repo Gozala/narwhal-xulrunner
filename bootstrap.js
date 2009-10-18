@@ -5,10 +5,12 @@
  * Bootstrap file for the XULRunner engine.
  */
 (function(global, evalGlobal) {
-    const Cc = Components.classes;
-    const Ci = Components.interfaces;
-    const Cu = Components.utils;
-    const Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment);
+    global.Cc = Components.classes;
+    global.Ci = Components.interfaces;
+    global.Cu = Components.utils;
+    global.Cr = Components.results;
+    global.CC = Components.Constructor;
+    var Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment);
 
     var moduleScopingEnabled = false;
     var NARWHAL_PATH = Env.exists("NARWHAL_PATH") ? Env.get("NARWHAL_PATH") : null,
