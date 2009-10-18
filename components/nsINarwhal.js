@@ -58,8 +58,8 @@ function readFile(file) {
             result.push(line.value);
         } while (haveMore)
     } catch(e) {
-            if (typeof e == "String") dump(e + "\n");
-            else for (var key in e) dump('Error:' + key + ": " + e[key] + "\n");
+        if (e.message) dump(e.message + "\n");
+        if (e.stack) dump(e.stack + "\n");
     } finally {
         fis.close();
     }
