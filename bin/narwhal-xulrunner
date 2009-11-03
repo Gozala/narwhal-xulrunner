@@ -33,7 +33,7 @@ export NARWHAL_ARGUMENTS
 
 # uses rlwrap (readline wrapper) if present
 RLWRAP=$(which rlwrap 2>/dev/null)
-REPL="telnet localhost 4242"
+NARWHAL_SHELL="telnet localhost 4747"
 # APP_HOME
 NARWHAL_APP_HOME="$NARWHAL_ENGINE_HOME/app/application.ini"
 # find available XULRunner
@@ -50,12 +50,12 @@ if [ "$(which cygpath 2>/dev/null)" ]; then
      NARWHAL_APP_HOME=$(cygpath -wa -- "$NARWHAL_APP_HOME")
 fi
 # narwhal app runner
-NARWHAL="$XULRUNNER -app $NARWHAL_APP_HOME -repl -narwhal $BOOTSTRAP"
+NARWHAL="$XULRUNNER -app $NARWHAL_APP_HOME -narwhal $BOOTSTRAP"
 
 if [ $(which $XULRUNNER) ]; then
     $NARWHAL &
     sleep 3;
-    $RLWRAP $REPL
+    $RLWRAP $NARWHAL_SHELL
 else
     echo "Can't find nor xulrunner nor firefox on your system !!"
 fi
