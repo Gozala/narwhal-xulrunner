@@ -39,7 +39,7 @@ NARWHAL_APP_HOME="$NARWHAL_ENGINE_HOME/app/application.ini"
 # find available XULRunner
 XULRUNNER=$(which xulrunner)
 if [ ! $(which $XULRUNNER) ]; then XULRUNNER=$(which firefox); fi
-if [ ! $(which $XULRUNNER) ]; then XULRUNNER=$(which /Applications/Firefox.app/Contents/MacOS/firefox); fi
+if [ ! $(which $XULRUNNER) ]; then XULRUNNER=$(which /Applications/Firefox.app/Contents/MacOS/firefox-bin); fi
 
 # converting paths if running on cygwin
 if [ "$(which cygpath 2>/dev/null)" ]; then
