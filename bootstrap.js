@@ -10,15 +10,13 @@
     global.Cu = Components.utils;
     global.Cr = Components.results;
     global.CC = Components.Constructor;
-    var Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment);
-
-    var moduleScopingEnabled = false;
-    var NARWHAL_PATH = Env.exists("NARWHAL_PATH") ? Env.get("NARWHAL_PATH") : null,
+    var Env = Cc["@mozilla.org/process/environment;1"].getService(Ci.nsIEnvironment),
+        NARWHAL_PATH = Env.exists("NARWHAL_PATH") ? Env.get("NARWHAL_PATH") : null,
         NARWHAL_HOME = Env.exists("NARWHAL_HOME") ? Env.get("NARWHAL_HOME") : null,
         NARWHAL_ENGINE_HOME = Env.exists("NARWHAL_ENGINE_HOME") ? Env.get("NARWHAL_ENGINE_HOME") : null,
         debug =  Env.exists("NARWHAL_DEBUG") ? Env.get("NARWHAL_DEBUG") : false,
         verbose = Env.exists("NARWHAL_VERBOSE") ? Env.get("NARWHAL_VERBOSE") : false,
-        args = Env.exists("NARWHAL_ARGUMENTS") ? Env.get("NARWHAL_ARGUMENTS").split(" ") : null;
+        moduleScopingEnabled = false;
 
     function print (message) {
         dump(message + '\n')
@@ -90,7 +88,6 @@
     }
     var path = getFile(NARWHAL_HOME, 'narwhal.js').path;
     var narwhal = Cu.evalInSandbox(read(path), global, "1.8", path, 0);
-    global.arguments = global.arguments || args;
     narwhal({
         global: global,
         evalGlobal: evalGlobal, //evaluateInGlobal,

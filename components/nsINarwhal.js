@@ -86,10 +86,6 @@ CommandLineBoot.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Ci.nsISupports, Ci.nsICommandLineHandler]),
     _xpcom_categories: [{ category: "command-line-handler" }],
     handle: function(cmdLine) {
-        try {
-            for (var i=0; i < cmdLine.length; i++)
-                ARGUMENTS.push(cmdLine.getArgument(i));
-        } catch (e) {}
         // trying to get file for passed bootstrap.js (narwhal-xulrunner will pass it)
         var bootstrap;
         try { bootstrap = getFile(cmdLine.handleFlagWithParam("narwhal", false)); } catch (e) {}
@@ -146,7 +142,7 @@ function bootstrapNarwhal(bootstrap) {
             if (!Env.exists(ENGINE_HOME))
                 Env.set(ENGINE_HOME, getResourceFile(EXTENSION_ENGINE_URI).path);
             var sandbox = Cu.Sandbox(Cc["@mozilla.org/systemprincipal;1"].createInstance(Ci.nsIPrincipal));
-            sandbox.args = ARGUMENTS;
+            //sandbox.args = ARGUMENTS;
             Cu.evalInSandbox(readFile(bootstrap), sandbox, "1.8", bootstrap.path, 0);
             Narwhal.prototype.__proto__ = sandbox;
         } catch(e) {
