@@ -146,6 +146,7 @@ function bootstrapNarwhal(bootstrap) {
             Cu.evalInSandbox(readFile(bootstrap), sandbox, "1.8", bootstrap.path, 0);
             Narwhal.prototype.__proto__ = sandbox;
         } catch(e) {
+            Cu.reportError(e);
             if (e.message) dump(e.message + "\n");
             if (e.stack) dump(e.stack + "\n");
         }
