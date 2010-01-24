@@ -1,8 +1,54 @@
 {
     "name": "narwhal-xulrunner",
-    "engine": "xulrunner",
-    "dependencies": ["narwhal"],
-    "author": "Irakli Gozalishvili (http://rfobic.wordpress.com/)",
     "description": "XULRunner engine support for Narwhal",
-    "keywords": ["narwhal", "engine", "xulrunner", "mozilla", "extension"]
+    "engine": "xulrunner",
+    "version": "0.1.0",
+    "keywords": ["narwhal", "engine", "xulrunner", "mozilla", "extension"],
+    "maintainers": [
+        {
+            "name": "Irakli Gozalishvili",
+            "email": "rfobic@gmail.com",
+            "web": "http://rfobic.wordpress.com/"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Irakli Gozalishvili",
+            "email": "rfobic@gmail.com",
+            "web": "http://rfobic.wordpress.com/"
+        },
+        {
+            "name": "Christoph Dorn",
+            "web": "http://www.christophdorn.com/"
+        },
+        {
+            "name": "Kris Kowal",
+            "email": "kris.kowal@cixar.com",
+            "web": "http://askawizard.blogspot.com/"
+        },
+        {
+            "name": "Zach Carter",
+            "web": "http://zaa.ch/"
+        }
+    ],
+    "bugs": { "web": "http://github.com/Gozala/narwhal-xulrunner/issues/" },
+    "licenses": [
+        { "type": "MPL" },
+        { "type": "MIT" }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git://github.com/Gozala/narwhal-xulrunner.git",
+        }
+    ],
+    "dependencies": {
+        "narwhal": "0.2"
+    },
+    "os": ["linux", "macos", "win"],
+    "cpu": ["x86", "ppc", "x86_64"],
+    "directories": {
+        "lib": "lib",
+        "bin": "bin"
+    }
 }

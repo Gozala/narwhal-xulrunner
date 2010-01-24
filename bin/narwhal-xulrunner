@@ -20,11 +20,6 @@ if [ ! "$NARWHAL_HOME" ]; then
     NARWHAL_HOME=$(dirname -- $(dirname -- "$NARWHAL_ENGINE_HOME"))
 fi
 
-NARWHAL_PATH="$NARWHAL_ENGINE_HOME/lib:$NARWHAL_HOME/engines/default/lib:$NARWHAL_HOME/lib"
-if [ "$JS_PATH" ]; then
-    NARWHAL_PATH="$NARWHAL_PATH:$JS_PATH"
-fi
-
 # collection arguments and exporting
 NARWHAL_ARGUMENTS=""
 for arg in $*; do
@@ -36,24 +31,32 @@ export NARWHAL_HOME
 export NARWHAL_ENGINE_HOME
 export NARWHAL_ARGUMENTS
 
-FIREFOX=firefox
-if [ -e /Applications/Firefox.app ]; then
-    FIREFOX="/Applications/Firefox.app/Contents/MacOS/firefox"
-fi
-
 # uses rlwrap (readline wrapper) if present
 RLWRAP=$(which rlwrap 2>/dev/null)
-REPL="telnet localhost 4242"
-NARWHAL="$NARWHAL_ENGINE_HOME/apps/firenarwhal/firenarwhal -narwhal"
+NARWHAL_SHELL="telnet localhost 4747"
+# APP_HOME
+NARWHAL_APP_HOME="$NARWHAL_ENGINE_HOME/app/application.ini"
+# find available XULRunner
+XULRUNNER=$(which xulrunner)
+if [ ! $(which $XULRUNNER) ]; then XULRUNNER=$(which firefox); fi
+if [ ! $(which $XULRUNNER) ]; then XULRUNNER=$(which /Applications/Firefox.app/Contents/MacOS/firefox-bin); fi
 
+# converting paths if running on cygwin
 if [ "$(which cygpath 2>/dev/null)" ]; then
-     BOOTSTRAP=$(cygpath -wa -- "$BOOTSTRAP")
      export NARWHAL_HOME=$(cygpath -wa -- "$NARWHAL_HOME")
      export NARWHAL_ENGINE_HOME=$(cygpath -wa -- "$NARWHAL_ENGINE_HOME")
+     BOOTSTRAP=$(cygpath -wa -- "$BOOTSTRAP")
+     XULRUNNER=$(cygpath -wa -- "$XULRUNNER")
+     NARWHAL_APP_HOME=$(cygpath -wa -- "$NARWHAL_APP_HOME")
 fi
+# narwhal app runner
+NARWHAL="$XULRUNNER -app $NARWHAL_APP_HOME -narwhal $BOOTSTRAP"
 
-# FIXME: no way to explicitly drop into shell
-$NARWHAL $BOOTSTRAP &
-sleep 2;
-$RLWRAP $REPL
+if [ $(which $XULRUNNER) ]; then
+    $NARWHAL &
+    sleep 3;
+    $RLWRAP $NARWHAL_SHELL
+else
+    echo "Can't find nor xulrunner nor firefox on your system !!"
+fi
 
