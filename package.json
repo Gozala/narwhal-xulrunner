@@ -42,9 +42,6 @@
             "url": "git://github.com/Gozala/narwhal-xulrunner.git",
         }
     ],
-    "dependencies": {
-        "narwhal": "0.2"
-    },
     "os": ["linux", "macos", "win"],
     "cpu": ["x86", "ppc", "x86_64"],
     "directories": {
