@@ -34,6 +34,8 @@
     "bugs": { "web": "http://github.com/Gozala/narwhal-xulrunner/issues/" },
     "licenses": [
         { "type": "MPL" },
+        { "type": "GPL 2.0" },
+        { "type": "LGPL 2.1" },
         { "type": "MIT" }
     ],
     "repositories": [

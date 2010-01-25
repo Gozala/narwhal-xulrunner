@@ -1,6 +1,3 @@
-/* Copyright (c) 2006 Irakli Gozalishvili <rfobic@gmail.com>
-   See the file LICENSE for licensing information. */
-
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
